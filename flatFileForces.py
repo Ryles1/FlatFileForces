@@ -9,8 +9,10 @@ col_names=['Row', 'LC', 'Member', 'End', 'Axial', 'Vy', 'Vz', 'Mx', 'My', 'Mz']
 # so in order for it to read those in properly, the string "''" is included in na_values.
 # This is needed in order to forward propagate load combination numbers and member names.
 
-#TODO: ADD A INPUT FOR FILENAME
-df = pd.read_table('forces.txt', na_values=["''"], delimiter=',', header=0, names=col_names, index_col=0)
+
+filename = input('Enter filename with extension:\n')
+assert filename.endswith('.txt'), 'Must be a .txt file.  Please include file extension in filename.'
+df = pd.read_table(filename, na_values=["''"], delimiter=',', header=0, names=col_names, index_col=0)
 
 # forward pad load combination numbers to replace NaN and convert column to int
 df['LC'] = df['LC'].fillna(method='pad')
