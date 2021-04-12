@@ -3,13 +3,16 @@
 # It then infills the missing values and outputs two csv files if the number of lines is greater than 1 million.
 # This is done in order to avoid slow copy paste operations in RISA and excel and possibly exceeding memory.
 import pandas as pd
+import os.path
 
 col_names=['Row', 'LC', 'Member', 'End', 'Axial', 'Vy', 'Vz', 'Mx', 'My', 'Mz']
 # read in RISA-3D flat file.  Note that empty values are a string with two ' characters,
 # so in order for it to read those in properly, the string "''" is included in na_values.
 # This is needed in order to forward propagate load combination numbers and member names.
 
-
+directory = input('Enter absolute network directory where file is stored:')
+if all([os.path.isdir(directory), os.path.isabs(directory), os.path.exists(directory)]):
+    os.chdir(directory)
 filename = input('Enter filename with extension:\n')
 assert filename.endswith('.txt'), 'Must be a .txt file.  Please include file extension in filename.'
 df = pd.read_table(filename, na_values=["''"], delimiter=',', header=0, names=col_names, index_col=0)
@@ -31,5 +34,5 @@ else:
     df2 = None
 
 df.to_csv('flatFileForces1.csv', index=False)
-if df2:
+if df2 is not None:
     df2.to_csv('flatFileForces2.csv', index=False)
