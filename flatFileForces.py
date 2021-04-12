@@ -1,4 +1,7 @@
 #! python3
+# This file parses a flat file from RISA-3D with only member end batch reactions.
+# It then infills the missing values and outputs two csv files if the number of lines is greater than 1 million.
+# This is done in order to avoid slow copy paste operations in RISA and excel and possibly exceeding memory.
 import pandas as pd
 
 col_names=['Row', 'LC', 'Member', 'End', 'Axial', 'Vy', 'Vz', 'Mx', 'My', 'Mz']
@@ -14,8 +17,7 @@ df['LC'] = df['LC'].astype('int')
 # remove single apostrophe on each end of member labels and forward propagate labels to replace NA
 df['Member'] = df['Member'].str.strip("'")
 df['Member'] = df['Member'].fillna(method='pad')
-print(df.head())
-print(df.tail())
+
 
 #will use 1.6+million lines, need to dump in two files
 
